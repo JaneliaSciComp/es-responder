@@ -367,7 +367,10 @@ def hitcount_minute(index):
 def hits(index):
     '''
     Return ES hits
-    Return the ES hits with user-specified criteria.
+    Return the ES hits with user-specified filtering criteria. Filtering 
+    criteria may be specified in the query, or in the body. If specified 
+    in the body, it can be a JSON string or form data. Note that "start"
+    and "end" are required, and must be epoch seconds.
     ---
     tags:
       - General
