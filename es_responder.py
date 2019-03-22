@@ -232,6 +232,7 @@ def dvid_hitcount_minute():
 @app.route('/dvid_hitcount/<string:period>', methods=['GET'])
 def dvid_hitcount(period):
     '''
+    Number of ES DVID hits in the last specified time period
     Return the total number of ES DVID hits over the last specified 
     time period for all instrumented DVID servers.
     ---
@@ -300,7 +301,7 @@ def query(query):
 @app.route('/hitcount/<string:index>/<string:period>', methods=['GET'])
 def hitcount(index, period):
     '''
-    Return number of hits in the last specified time period
+    Number of ES hits in the last specified time period
     Return the total number of ES hits over the last specified 
     time period for a specified index.
     ---
