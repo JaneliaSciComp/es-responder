@@ -1,11 +1,11 @@
-import os
-import requests
-import sys
 from datetime import datetime, timedelta
-import elasticsearch
+import os
+import sys
 from time import time
 from urllib.parse import parse_qs
-from flask import Flask, g, render_template, request, jsonify
+import requests
+import elasticsearch
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from flask_swagger import swagger
 
@@ -50,7 +50,7 @@ class InvalidUsage(Exception):
 
 @app.before_request
 def before_request():
-    global esearch,start_time, CONFIG, QUERY, SERVER
+    global esearch, start_time, CONFIG, QUERY, SERVER
     start_time = time()
     app.config['COUNTER'] += 1
     endpoint = request.endpoint if request.endpoint else '(Unknown)'
@@ -58,7 +58,7 @@ def before_request():
     if request.method == 'OPTIONS':
         result = initializeResult()
         return generateResponse(result)
-    if not len(QUERY):
+    if not QUERY:
         data = call_responder('config', 'config/rest_services')
         CONFIG = data['config']
         data = call_responder('config', 'config/servers')
@@ -88,7 +88,7 @@ def get_parameters(result):
             query_string = query_string.decode('utf-8')
         result['rest']['query_string'] = query_string
         qs = parse_qs(query_string)
-        for key,val in qs.items():
+        for key, val in qs.items():
             pd[key] = val[0]
     elif request.form:
         result['rest']['form'] = request.form
@@ -102,8 +102,8 @@ def get_parameters(result):
             if '-' in i[0] or i[0].lower() in ['accept', 'host', 'connection']:
                 continue
             pd[i[0].lower()] = i[1]
-        result['rest']['headers'] = pd 
-    return(pd)
+        result['rest']['headers'] = pd
+    return pd
 
 
 def initializeResult():
@@ -207,8 +207,8 @@ def stats():
 def dvid_hitcount_minute():
     '''
     Number of ES DVID hits in the last minute
-    Return the total number of hits over the last minute for all 
-    instrumented DVID servers.
+    Return the total number of hits over the last minute for all
+     instrumented DVID servers.
     ---
     tags:
       - DVID
@@ -233,8 +233,8 @@ def dvid_hitcount_minute():
 def dvid_hitcount(period):
     '''
     Number of ES DVID hits in the last specified time period
-    Return the total number of ES DVID hits over the last specified 
-    time period for all instrumented DVID servers.
+    Return the total number of ES DVID hits over the last specified
+     time period for all instrumented DVID servers.
     ---
     tags:
       - DVID
@@ -268,8 +268,8 @@ def dvid_hitcount(period):
 def query(query):
     '''
     Execute a general query
-    Return results for a general query as defined in the 
-    elasticsearch_queries configuration.
+    Return results for a general query as defined in the
+     elasticsearch_queries configuration.
     ---
     tags:
       - General
@@ -302,8 +302,8 @@ def query(query):
 def hitcount(index, period):
     '''
     Number of ES hits in the last specified time period
-    Return the total number of ES hits over the last specified 
-    time period for a specified index.
+    Return the total number of ES hits over the last specified
+     time period for a specified index.
     ---
     tags:
       - General
@@ -368,10 +368,10 @@ def hitcount_minute(index):
 def hits(index):
     '''
     Return ES hits
-    Return the ES hits with user-specified filtering criteria. Filtering 
-    criteria may be specified in the query, or in the body. If specified 
-    in the body, it can be a JSON string or form data. Note that "start"
-    and "end" are required, and must be epoch seconds.
+    Return the ES hits with user-specified filtering criteria. Filtering
+     criteria may be specified in the query, or in the body. If specified
+     in the body, it can be a JSON string or form data. Note that "start"
+     and "end" are required, and must be epoch seconds.
     ---
     tags:
       - General
@@ -388,22 +388,59 @@ def hits(index):
     result = initializeResult()
     parm = get_parameters(result)
     missing = ''
-    for p in ['start', 'end']:
-        if p not in parm:
-            missing = missing + p + ' '
+    for prm in ['start', 'end']:
+        if prm not in parm:
+            missing = missing + prm + ' '
     if missing:
         raise InvalidUsage('Missing arguments: ' + missing)
     must = []
-    for p in parm:
-        if p in ['start', 'end']:
+    for prm in parm:
+        if prm in ['start', 'end']:
             continue
-        must.append({"term": {p: parm[p].lower()}})
+        must.append({"term": {prm: parm[prm].lower()}})
     payload = {"size": 10000,
                "query": {"bool": {"filter": {"range": {"@timestamp": {"gte": parm['start'],
-                                                  "lte": parm['end'],
-                                                  "format": "epoch_second"}}}}}}
-    if len(must):
+                                                                      "lte": parm['end'],
+                                                                      "format": "epoch_second"}}}}}}
+    if must:
         payload['query']['bool']['must'] = must
+    result['rest']['payload'] = payload
+    try:
+        es_result = esearch.search(index=index, body=payload)
+    except Exception as ex:
+        raise InvalidUsage(str(ex))
+    result['result'] = es_result
+    return generateResponse(result)
+
+
+@app.route('/lasthits/<string:index>/<int:number>', methods=['GET'])
+def lasthits(index, number):
+    '''
+    Return last n ES hits
+    Return the last n ES hits from the specified index.
+    ---
+    tags:
+      - General
+    parameters:
+      - in: path
+        name: index
+        type: string
+        required: true
+        description: index to query
+      - in: path
+        name: number
+        type: int
+        required: true
+        description: number of hits to return
+    responses:
+      200:
+          description: hits
+    '''
+    result = initializeResult()
+    parm = get_parameters(result)
+    payload = {"query": {"range": {"@timestamp": {"gte": "now-1h"}}},
+               "size": int(number),
+               "sort": [{"@timestamp": {"order": "desc"}}]}
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload)
