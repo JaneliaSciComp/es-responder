@@ -298,6 +298,7 @@ def query(query):
     return generateResponse(result)
 
 
+@app.route('/hitcount/<string:index>/', defaults={'period': None}, methods=['GET'])
 @app.route('/hitcount/<string:index>/<string:period>', methods=['GET'])
 def hitcount(index, period):
     '''
@@ -323,6 +324,8 @@ def hitcount(index, period):
           description: number of hits in the last time period
     '''
     result = initializeResult()
+    if not period:
+        period = '1m'
     payload = {"query": {"range": {"@timestamp": {"gte": "now-" + period}}}}
     result['rest']['payload'] = payload
     try:
@@ -334,11 +337,13 @@ def hitcount(index, period):
     return generateResponse(result)
 
 
-@app.route('/hitcount/<string:index>', methods=['GET'])
-def hitcount_minute(index):
+@app.route('/duration/<string:index>/', defaults={'period': None})
+@app.route('/duration/<string:index>/<string:period>', methods=['GET'])
+def duration(index, period):
     '''
-    Number of ES hits in the last minute
-    Return the total number of ES hits over the last minute.
+    Average duration of ES hits in the last specified time period
+    Return the average duration of ES hits over the last specified
+     time period for a specified index.
     ---
     tags:
       - General
@@ -348,19 +353,28 @@ def hitcount_minute(index):
         type: string
         required: true
         description: index to query
+      - in: path
+        name: period
+        type: string
+        required: true
+        description: time period (1s, 5m, 1h, 7d, etc.)
     responses:
       200:
-          description: number of hits in the last minute
+          description: average duration (in ms) of hits in the last time period
     '''
     result = initializeResult()
-    payload = {"query": {"range": {"@timestamp": {"gte": "now-1m"}}}}
+    payload = QUERY['dvid_avg_hits']['query']
+    if period:
+        dur = payload['query']['bool']['must'][0]['range']['@timestamp']['gte']
+        payload['query']['bool']['must'][0]['range']['@timestamp']['gte'] = dur.replace('1m', period)
+        print(payload)
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload,
-                                   filter_path=['hits.total'])
+                                   filter_path=['aggregations.1.value'])
     except Exception as ex:
         raise InvalidUsage(str(ex))
-    result['result'] = es_result['hits']['total']
+    result['result'] = es_result['aggregations']['1']['value']
     return generateResponse(result)
 
 
