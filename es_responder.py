@@ -367,7 +367,6 @@ def duration(index, period):
     if period:
         dur = payload['query']['bool']['must'][0]['range']['@timestamp']['gte']
         payload['query']['bool']['must'][0]['range']['@timestamp']['gte'] = dur.replace('1m', period)
-        print(payload)
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload,
@@ -375,6 +374,51 @@ def duration(index, period):
     except Exception as ex:
         raise InvalidUsage(str(ex))
     result['result'] = es_result['aggregations']['1']['value']
+    return generateResponse(result)
+
+
+@app.route('/metrics/<string:index>/', defaults={'period': None})
+@app.route('/metrics/<string:index>/<string:period>', methods=['GET'])
+def metrics(index, period):
+    '''
+    Metrics for ES hits in the last specified time period
+    Return duration/bytecount metrics for ES hits over the last specified
+     time period for a specified index.
+    ---
+    tags:
+      - General
+    parameters:
+      - in: path
+        name: index
+        type: string
+        required: true
+        description: index to query
+      - in: path
+        name: period
+        type: string
+        required: true
+        description: time period (1s, 5m, 1h, 7d, etc.)
+    responses:
+      200:
+          description: metrics for hits in the last time period
+    '''
+    result = initializeResult()
+    payload = QUERY['standard_metrics']['query']
+    if period:
+        dur = payload['query']['bool']['must'][0]['range']['@timestamp']['gte']
+        payload['query']['bool']['must'][0]['range']['@timestamp']['gte'] = dur.replace('1m', period)
+    result['rest']['payload'] = payload
+    try:
+        es_result = esearch.search(index=index, body=payload)
+    except Exception as ex:
+        raise InvalidUsage(str(ex))
+    result['result'] = {'count': es_result['hits']['total'],
+                        'average_duration': es_result['aggregations']['1']['value'],
+                        'min_duration': es_result['aggregations']['2']['value'],
+                        'max_duration': es_result['aggregations']['3']['value'],
+                        'bytes_in': es_result['aggregations']['4']['value'],
+                        'bytes_out': es_result['aggregations']['5']['value']
+                       }
     return generateResponse(result)
 
 
