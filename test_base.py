@@ -2,7 +2,7 @@ from es_responder import app
 import unittest
 import time
 
-NOW = int(time.time())
+NOW = int(time.time()) - 60
 
 class TestDiagnostics(unittest.TestCase):
     def setUp(self):
@@ -33,21 +33,6 @@ class TestContent(unittest.TestCase):
         self.app = app.test_client()
 
 # ******************************************************************************
-# * DVID endpoints                                                             *
-# ******************************************************************************
-    def test_dvid_hitcount_minute(self):
-        response = self.app.get('/dvid_hitcount')
-        self.assertEqual(response.status_code, 200)
-        self.assertGreaterEqual(response.json['result'], 1)
-
-    def test_dvid_hitcount(self):
-        response = self.app.get('/dvid_hitcount/1d')
-        self.assertEqual(response.status_code, 200)
-        self.assertGreaterEqual(response.json['result'], 1000)
-        response = self.app.get('/dvid_hitcount/1x')
-        self.assertEqual(response.status_code, 400)
-
-# ******************************************************************************
 # * General endpoints                                                          *
 # ******************************************************************************
     def test_query(self):
@@ -57,19 +42,14 @@ class TestContent(unittest.TestCase):
         response = self.app.get('/query/no_such_config')
         self.assertEqual(response.status_code, 404)
 
-    def test_hitcount(self):
-        response = self.app.get('/hitcount/*/1m')
+    def test_metrics(self):
+        response = self.app.get('/metrics/*')
+        self.assertEqual(response.status_code, 301)
+        response = self.app.get('/metrics/*/1h')
         self.assertEqual(response.status_code, 200)
-        self.assertGreaterEqual(response.json['result'], 100)
-        response = self.app.get('/hitcount/no_such_index')
-        self.assertEqual(response.status_code, 400)
-
-    def test_hitcount_minute(self):
-        response = self.app.get('/hitcount/*')
-        self.assertEqual(response.status_code, 200)
-        self.assertGreaterEqual(response.json['result'], 100)
-        response = self.app.get('/hitcount/no_such_index')
-        self.assertEqual(response.status_code, 400)
+        self.assertGreaterEqual(response.json['result']['count'], 100)
+        response = self.app.get('/metrics/ook/1h')
+        self.assertEqual(response.status_code, 404)
 
     def test_hits(self):
         response = self.app.get('/hits/*')
@@ -83,6 +63,15 @@ class TestContent(unittest.TestCase):
         response = self.app.get('/hits/*?method=ook&start=' + str(NOW-60) + '&end=' + str(NOW))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['result']['hits']['total'], 0)
+        response = self.app.get('/hits/no_such_index?start=' + str(NOW-60) + '&end=' + str(NOW))
+        self.assertEqual(response.status_code, 404)
+
+    def test_lasthits(self):
+        response = self.app.get('/lasthits/*/1')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json['result']['hits']['hits']), 1)
+        response = self.app.get('/lasthits/no_such_index/1')
+        self.assertEqual(response.status_code, 404)
 
 # ******************************************************************************
 

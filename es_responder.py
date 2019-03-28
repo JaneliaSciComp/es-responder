@@ -200,66 +200,6 @@ def stats():
     return generateResponse(result)
 
 
-# *****************************************************************************
-# * DVID endpoints                                                            *
-# *****************************************************************************
-@app.route('/dvid_hitcount', methods=['GET'])
-def dvid_hitcount_minute():
-    '''
-    Number of ES DVID hits in the last minute
-    Return the total number of hits over the last minute for all
-     instrumented DVID servers.
-    ---
-    tags:
-      - DVID
-    responses:
-      200:
-          description: query response
-    '''
-    result = initializeResult()
-    index = "emdata*_dvid_activity-*"
-    payload = {"query": {"range": {"@timestamp": {"gte": "now-1m"}}}}
-    result['rest']['payload'] = payload
-    try:
-        es_result = esearch.search(index=index, body=payload,
-                                   filter_path=['hits.total'])
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
-    result['result'] = es_result['hits']['total']
-    return generateResponse(result)
-
-
-@app.route('/dvid_hitcount/<string:period>', methods=['GET'])
-def dvid_hitcount(period):
-    '''
-    Number of ES DVID hits in the last specified time period
-    Return the total number of ES DVID hits over the last specified
-     time period for all instrumented DVID servers.
-    ---
-    tags:
-      - DVID
-    parameters:
-      - in: path
-        name: period
-        type: string
-        required: true
-        description: time period (1s, 5m, 1h, 7d, etc.)
-    responses:
-      200:
-          description: query response
-    '''
-    result = initializeResult()
-    index = "emdata*_dvid_activity-*"
-    payload = {"query": {"range": {"@timestamp": {"gte": "now-" + period}}}}
-    result['rest']['payload'] = payload
-    try:
-        es_result = esearch.search(index=index, body=payload,
-                                   filter_path=['hits.total'])
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
-    result['result'] = es_result['hits']['total']
-    return generateResponse(result)
-
 
 # *****************************************************************************
 # * General endpoints                                                         *
@@ -298,92 +238,13 @@ def query(query):
     return generateResponse(result)
 
 
-@app.route('/hitcount/<string:index>/', defaults={'period': None}, methods=['GET'])
-@app.route('/hitcount/<string:index>/<string:period>', methods=['GET'])
-def hitcount(index, period):
-    '''
-    Number of ES hits in the last specified time period
-    Return the total number of ES hits over the last specified
-     time period for a specified index.
-    ---
-    tags:
-      - General
-    parameters:
-      - in: path
-        name: index
-        type: string
-        required: true
-        description: index to query
-      - in: path
-        name: period
-        type: string
-        required: true
-        description: time period (1s, 5m, 1h, 7d, etc.)
-    responses:
-      200:
-          description: number of hits in the last time period
-    '''
-    result = initializeResult()
-    if not period:
-        period = '1m'
-    payload = {"query": {"range": {"@timestamp": {"gte": "now-" + period}}}}
-    result['rest']['payload'] = payload
-    try:
-        es_result = esearch.search(index=index, body=payload,
-                                   filter_path=['hits.total'])
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
-    result['result'] = es_result['hits']['total']
-    return generateResponse(result)
-
-
-@app.route('/duration/<string:index>/', defaults={'period': None})
-@app.route('/duration/<string:index>/<string:period>', methods=['GET'])
-def duration(index, period):
-    '''
-    Average duration of ES hits in the last specified time period
-    Return the average duration of ES hits over the last specified
-     time period for a specified index.
-    ---
-    tags:
-      - General
-    parameters:
-      - in: path
-        name: index
-        type: string
-        required: true
-        description: index to query
-      - in: path
-        name: period
-        type: string
-        required: true
-        description: time period (1s, 5m, 1h, 7d, etc.)
-    responses:
-      200:
-          description: average duration (in ms) of hits in the last time period
-    '''
-    result = initializeResult()
-    payload = QUERY['dvid_avg_hits']['query']
-    if period:
-        dur = payload['query']['bool']['must'][0]['range']['@timestamp']['gte']
-        payload['query']['bool']['must'][0]['range']['@timestamp']['gte'] = dur.replace('1m', period)
-    result['rest']['payload'] = payload
-    try:
-        es_result = esearch.search(index=index, body=payload,
-                                   filter_path=['aggregations.1.value'])
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
-    result['result'] = es_result['aggregations']['1']['value']
-    return generateResponse(result)
-
-
 @app.route('/metrics/<string:index>/', defaults={'period': None})
 @app.route('/metrics/<string:index>/<string:period>', methods=['GET'])
 def metrics(index, period):
     '''
     Metrics for ES hits in the last specified time period
-    Return duration/bytecount metrics for ES hits over the last specified
-     time period for a specified index.
+    Return duration/bytecount metrics for ES hits over the last
+     specified time period for a specified index.
     ---
     tags:
       - General
@@ -410,8 +271,10 @@ def metrics(index, period):
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload)
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
+    except elasticsearch.NotFoundError:
+        raise InvalidUsage("Index " + index + " does not exist", 404)
+    except Exception as esex:
+        raise InvalidUsage(str(esex))
     result['result'] = {'count': es_result['hits']['total'],
                         'average_duration': es_result['aggregations']['1']['value'],
                         'min_duration': es_result['aggregations']['2']['value'],
@@ -465,8 +328,10 @@ def hits(index):
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload)
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
+    except elasticsearch.NotFoundError:
+        raise InvalidUsage("Index " + index + " does not exist", 404)
+    except Exception as esex:
+        raise InvalidUsage(str(esex))
     result['result'] = es_result
     return generateResponse(result)
 
@@ -502,8 +367,10 @@ def lasthits(index, number):
     result['rest']['payload'] = payload
     try:
         es_result = esearch.search(index=index, body=payload)
-    except Exception as ex:
-        raise InvalidUsage(str(ex))
+    except elasticsearch.NotFoundError:
+        raise InvalidUsage("Index " + index + " does not exist", 404)
+    except Exception as esex:
+        raise InvalidUsage(str(esex))
     result['result'] = es_result
     return generateResponse(result)
 
