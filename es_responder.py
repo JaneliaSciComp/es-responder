@@ -4,6 +4,7 @@ import sys
 from time import time
 from urllib.parse import parse_qs
 import requests
+from pympler import asizeof
 import elasticsearch
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
@@ -130,6 +131,7 @@ def call_responder(server, endpoint):
 def generateResponse(result):
     global start_time
     result['rest']['elapsed_time'] = str(timedelta(seconds=(time() - start_time)))
+    result['rest']['bytes_out'] = asizeof.asizeof(result)
     return jsonify(**result)
 
 
