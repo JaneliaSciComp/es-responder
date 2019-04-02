@@ -14,22 +14,15 @@ After installing on the production server, take the following steps to start the
 1. `sudo systemctl nginx start`
 
 ## Development
-1. Create a virtual environment (unless you already have one):
-
-    `python3 -m venv myenv`
-1. Activate your virtual environment:
-
-    `source myenv/bin/activate`
+1. Create and activate a clean Python 3 environment:
+    ```python3 -m venv myenv
+    source myenv/bin/activate```
 1. Install dependencies:
-
     `pip3 install -r requirements.txt`
 1. Run tests:
-
     `python3 test_base.py`
 1. Start server:
-
     `python3 es_responder.py`
 1. When you're done, deactivate the virtual environment:
-
     `deactivate`
 
