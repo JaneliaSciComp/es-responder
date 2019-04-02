@@ -11,12 +11,17 @@ Lightweight custom REST API for ElasticSearch queries
 
     python3 -m venv myenv
 1. Activate your virtual environment:
+
     source myenv/bin/activate
 1. Install dependencies:
+
     pip3 inslatt -r requirements.txt
 1. Run tests:
+
     python3 test_base.py
 1. Start server:
+
     python3 es_responder.py
 1. When you're done, deactivate the virTual environment:
+
     deactivate
