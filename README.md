@@ -11,8 +11,8 @@ Lightweight custom REST API for ElasticSearch queries
 After installing on the production server, take the following steps to start the system:
 ```
 cd /opt/flask/es-responder
-sudo systemctl gunicorn start
-sudo systemctl nginx start
+sudo systemctl start gunicorn
+sudo systemctl start nginx
 ```
 
 ## Development
