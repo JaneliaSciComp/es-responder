@@ -8,6 +8,7 @@ Lightweight custom REST API for ElasticSearch queries
 
 ## Development
 1. Create a virtual environment (unless you already have one):
+
     python3 -m venv myenv
 1. Activate your virtual environment:
     source myenv/bin/activate
