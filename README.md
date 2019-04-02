@@ -6,6 +6,13 @@
 
 Lightweight custom REST API for ElasticSearch queries
 
+## Deployment
+
+After installing on the production server, take the following steps to start the system:
+1. `cd /opt/flask/es-responder`
+1. `sudo systemctl gunicorn start`
+1. `sudo systemctl nginx start`
+
 ## Development
 1. Create a virtual environment (unless you already have one):
 
@@ -26,9 +33,3 @@ Lightweight custom REST API for ElasticSearch queries
 
     `deactivate`
 
-## Deployment
-
-After installing on the production server, take the following steps to start the system:
-1. `cd /opt/flask/es-responder`
-1. `sudo systemctl gunicorn start`
-1. `sudo systemctl nginx start`
