@@ -22,6 +22,13 @@ Lightweight custom REST API for ElasticSearch queries
 1. Start server:
 
     python3 es_responder.py
-1. When you're done, deactivate the virTual environment:
+1. When you're done, deactivate the virtual environment:
 
     deactivate
+
+## Deployment
+
+After installing on the production server, take the following steps to start the system:
+1. cd /opt/flask/es-responder
+1. sudo systemctl gunicorn start
+1. sudo systemctl nginx start
