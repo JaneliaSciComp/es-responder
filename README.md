@@ -14,6 +14,7 @@ will use the following configurations:
 - rest_services
 - servers
 - elasticsearch_queries
+
 The location of the configuration system is in the config.cfg file as CONFIG_ROOT.
 
 ## Deployment
