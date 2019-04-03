@@ -4,7 +4,17 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)](https://github.com/JaneliaSciComp/es-responder)
 [![GitHub commit merge status](https://img.shields.io/github/commit-status/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.svg)](https://github.com/JaneliaSciComp/es-responder)
 
-Lightweight custom REST API for ElasticSearch queries
+## Summary
+A lightweight custom REST API for ElasticSearch queries. Once installed, just going to the top-level page will show Swagger documentation.
+
+## Configuration
+
+This system depends on the [Centralized Config](https://github.com/JaneliaSciComp/Centralized_Config) system, and
+will use the following configurations:
+- rest_services
+- servers
+- elasticsearch_queries
+The location of the configuration system is in the config.cfg file as CONFIG_ROOT.
 
 ## Deployment
 
