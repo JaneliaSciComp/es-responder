@@ -54,7 +54,7 @@ class TestContent(unittest.TestCase):
     def test_hits(self):
         response = self.APP.get('/hits/*')
         self.assertEqual(response.status_code, 400)
-        response = self.APP.get('/hits/*?start=' + str(NOW-60) + '&end=' + str(NOW))
+        response = self.APP.get('/hits/*?start=' + str(NOW-180) + '&end=' + str(NOW))
         self.assertEqual(response.status_code, 200)
         self.assertGreaterEqual(response.json['result']['hits']['total'], 10)
         response = self.APP.get('/hits/*?method=get&start=' + str(NOW-60) + '&end=' + str(NOW))
