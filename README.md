@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/JaneliaSciComp/es-responder.svg?branch=master)](https://travis-ci.org/JaneliaSciComp/es-responder)
 [![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)](https://github.com/JaneliaSciComp/es-responder)
 [![GitHub commit merge status](https://img.shields.io/github/commit-status/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.svg)](https://github.com/JaneliaSciComp/es-responder)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![Requirements Status](https://requires.io/github/JaneliaSciComp/es-responder/requirements.svg?branch=master)](https://requires.io/github/connectome-neuprint/JaneliaSciComp/es-responder/requirements/?branch=master)
 
 ## Summary
 A lightweight custom REST API for ElasticSearch queries. Once installed, just going to the top-level page will show Swagger documentation.
