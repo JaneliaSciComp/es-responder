@@ -56,7 +56,7 @@ def before_request():
     APP.config['COUNTER'] += 1
     endpoint = request.endpoint if request.endpoint else '(Unknown)'
     APP.config['ENDPOINTS'][endpoint] = APP.config['ENDPOINTS'].get(endpoint, 0) + 1
-    if request.method == 'OPTIONS':
+    if request.method == 'OPTIONS': # pragma: no cover
         result = initialize_result()
         return generate_response(result)
     if not QUERY:
@@ -69,7 +69,7 @@ def before_request():
     if not ESEARCH:
         try:
             ESEARCH = elasticsearch.Elasticsearch(SERVER['elk-elastic']['address'])
-        except Exception as ex:
+        except Exception as ex: # pragma: no cover
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             print(message)

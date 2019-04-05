@@ -14,6 +14,8 @@ class TestDiagnostics(unittest.TestCase):
     def test_blank(self):
         response = self.APP.get('/')
         self.assertEqual(response.status_code, 200)
+        response = self.APP.options('/')
+        self.assertEqual(response.status_code, 200)
 
     def test_spec(self):
         response = self.APP.get('/spec')
