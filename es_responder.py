@@ -120,7 +120,7 @@ def call_responder(server, endpoint):
     url = CONFIG[server]['url'] + endpoint
     try:
         req = requests.get(url)
-    except requests.exceptions.RequestException as err:
+    except requests.exceptions.RequestException as err: # pragma no cover
         print(err)
         sys.exit(-1)
     if req.status_code == 200:
@@ -195,7 +195,7 @@ def stats():
                            }
         if None in result['stats']['endpoint_counts']:
             del result['stats']['endpoint_counts']
-    except Exception as ex:
+    except Exception as ex: # pragma no cover
         template = "An exception of type {0} occurred. Arguments:{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         raise InvalidUsage('Error: %s' % (message,))
@@ -232,7 +232,7 @@ def esquery(query):
         try:
             es_result = ESEARCH.search(index=QUERY[query]['index'],
                                        body=payload)
-        except Exception as ex:
+        except Exception as ex: # pragma no cover
             raise InvalidUsage(str(ex))
         result['result'] = es_result
     else:
@@ -276,7 +276,7 @@ def metrics(index, period):
         es_result = ESEARCH.search(index=index, body=payload)
     except elasticsearch.NotFoundError:
         raise InvalidUsage("Index " + index + " does not exist", 404)
-    except Exception as esex:
+    except Exception as esex: # pragma no cover
         raise InvalidUsage(str(esex))
     result['result'] = {'count': es_result['hits']['total'],
                         'average_duration': es_result['aggregations']['1']['value'],
@@ -333,7 +333,7 @@ def hits(index):
         es_result = ESEARCH.search(index=index, body=payload)
     except elasticsearch.NotFoundError:
         raise InvalidUsage("Index " + index + " does not exist", 404)
-    except Exception as esex:
+    except Exception as esex: # pragma no cover
         raise InvalidUsage(str(esex))
     result['result'] = es_result
     return generate_response(result)
@@ -371,7 +371,7 @@ def lasthits(index, number):
         es_result = ESEARCH.search(index=index, body=payload)
     except elasticsearch.NotFoundError:
         raise InvalidUsage("Index " + index + " does not exist", 404)
-    except Exception as esex:
+    except Exception as esex: # pragma no cover
         raise InvalidUsage(str(esex))
     result['result'] = es_result
     return generate_response(result)
