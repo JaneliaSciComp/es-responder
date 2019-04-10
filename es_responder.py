@@ -228,6 +228,7 @@ def esquery(query):
     result = initialize_result()
     if query in QUERY:
         payload = QUERY[query]['query']
+        payload['size'] = 10000
         result['rest']['payload'] = payload
         try:
             es_result = ESEARCH.search(index=QUERY[query]['index'],
