@@ -12,14 +12,14 @@ from flask_swagger import swagger
 
 
 __version__ = '0.1.0'
-APP = Flask(__name__)
-APP.config.from_pyfile("config.cfg")
-CORS(APP)
-APP.config['STARTTIME'] = time()
-APP.config['STARTDT'] = datetime.now()
+app = Flask(__name__)
+app.config.from_pyfile("config.cfg")
+CORS(app)
+app.config['STARTTIME'] = time()
+app.config['STARTDT'] = datetime.now()
 START_TIME = ''
 # Configuration
-CONFIG = {'config': {'url': APP.config['CONFIG_ROOT']}}
+CONFIG = {'config': {'url': app.config['CONFIG_ROOT']}}
 QUERY = {}
 SERVER = {}
 ESEARCH = ''
@@ -49,13 +49,13 @@ class InvalidUsage(Exception):
 # *****************************************************************************
 
 
-@APP.before_request
+@app.before_request
 def before_request():
     global ESEARCH, START_TIME, CONFIG, QUERY, SERVER
     START_TIME = time()
-    APP.config['COUNTER'] += 1
+    app.config['COUNTER'] += 1
     endpoint = request.endpoint if request.endpoint else '(Unknown)'
-    APP.config['ENDPOINTS'][endpoint] = APP.config['ENDPOINTS'].get(endpoint, 0) + 1
+    app.config['ENDPOINTS'][endpoint] = app.config['ENDPOINTS'].get(endpoint, 0) + 1
     if request.method == 'OPTIONS': # pragma: no cover
         result = initialize_result()
         return generate_response(result)
@@ -140,32 +140,32 @@ def generate_response(result):
 # *****************************************************************************
 
 
-@APP.errorhandler(InvalidUsage)
+@app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
 
 
-@APP.route('/')
+@app.route('/')
 def show_swagger():
     return render_template('swagger_ui.html')
 
 
-@APP.route("/spec")
+@app.route("/spec")
 def spec():
     return get_doc_json()
 
 
-@APP.route('/doc')
+@app.route('/doc')
 def get_doc_json():
-    swag = swagger(APP)
+    swag = swagger(app)
     swag['info']['version'] = __version__
     swag['info']['title'] = "ElasticSearch Responder"
     return jsonify(swag)
 
 
-@APP.route("/stats")
+@app.route("/stats")
 def stats():
     '''
     Return stats
@@ -181,17 +181,17 @@ def stats():
     '''
     result = initialize_result()
     try:
-        start = datetime.fromtimestamp(APP.config['STARTTIME']).strftime('%Y-%m-%d %H:%M:%S')
-        up_time = datetime.now() - APP.config['STARTDT']
+        start = datetime.fromtimestamp(app.config['STARTTIME']).strftime('%Y-%m-%d %H:%M:%S')
+        up_time = datetime.now() - app.config['STARTDT']
         health = ESEARCH.cluster.health()
         result['stats'] = {"version": __version__,
-                           "requests": APP.config['COUNTER'],
+                           "requests": app.config['COUNTER'],
                            "start_time": start,
                            "uptime": str(up_time),
                            "health": health,
                            "python": sys.version,
                            "pid": os.getpid(),
-                           "endpoint_counts": APP.config['ENDPOINTS']
+                           "endpoint_counts": app.config['ENDPOINTS']
                            }
         if None in result['stats']['endpoint_counts']:
             del result['stats']['endpoint_counts']
@@ -206,7 +206,7 @@ def stats():
 # *****************************************************************************
 # * General endpoints                                                         *
 # *****************************************************************************
-@APP.route('/query/<string:query>', methods=['GET'])
+@app.route('/query/<string:query>', methods=['GET'])
 def esquery(query):
     '''
     Execute a general query
@@ -241,8 +241,8 @@ def esquery(query):
     return generate_response(result)
 
 
-@APP.route('/metrics/<string:index>/', defaults={'period': None})
-@APP.route('/metrics/<string:index>/<string:period>', methods=['GET'])
+@app.route('/metrics/<string:index>/', defaults={'period': None})
+@app.route('/metrics/<string:index>/<string:period>', methods=['GET'])
 def metrics(index, period):
     '''
     Metrics for ES hits in the last specified time period
@@ -289,7 +289,7 @@ def metrics(index, period):
     return generate_response(result)
 
 
-@APP.route('/hits/<string:index>', methods=['GET'])
+@app.route('/hits/<string:index>', methods=['GET'])
 def hits(index):
     '''
     Return ES hits
@@ -340,7 +340,7 @@ def hits(index):
     return generate_response(result)
 
 
-@APP.route('/lasthits/<string:index>/<int:number>', methods=['GET'])
+@app.route('/lasthits/<string:index>/<int:number>', methods=['GET'])
 def lasthits(index, number):
     '''
     Return last n ES hits
@@ -382,4 +382,4 @@ def lasthits(index, number):
 
 
 if __name__ == '__main__':
-    APP.run(debug=True)
+    app.run(debug=True)
