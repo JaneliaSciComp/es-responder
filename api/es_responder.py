@@ -311,12 +311,16 @@ def hits(index):
           description: hits
     '''
     result = initialize_result()
-    parm = get_parameters(result)
+    try:
+        parm = get_parameters(result)
+    except:
+        raise InvalidUsage("No arguments provided")
     missing = ''
     for prm in ['start', 'end']:
         if prm not in parm:
             missing = missing + prm + ' '
     if missing:
+        print("Missing")
         raise InvalidUsage('Missing arguments: ' + missing)
     must = []
     for prm in parm:
