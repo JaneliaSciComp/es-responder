@@ -11,7 +11,7 @@ from flask_cors import CORS
 from flask_swagger import swagger
 
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
 CORS(app)
