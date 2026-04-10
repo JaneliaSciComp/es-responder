@@ -1,4 +1,6 @@
+# PATCHED: Configurator dependency removed - loads config from local /config/*.json files
 from datetime import datetime, timedelta
+import json
 import os
 import sys
 from time import time
@@ -11,7 +13,21 @@ from flask_cors import CORS
 from flask_swagger import swagger
 
 
-__version__ = '0.2.0'
+def _load_config(name):
+    """Load config from local JSON file (replaces configurator call)"""
+    config_path = os.path.join('/config', f'{name}.json')
+    if os.path.exists(config_path):
+        with open(config_path) as f:
+            return json.load(f)
+    # Fallback: try relative path (for local dev)
+    config_path = os.path.join('config', f'{name}.json')
+    if os.path.exists(config_path):
+        with open(config_path) as f:
+            return json.load(f)
+    raise FileNotFoundError(f"Config file not found: {name}.json")
+
+
+__version__ = '1.0.0'
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
 CORS(app)
@@ -19,7 +35,7 @@ app.config['STARTTIME'] = time()
 app.config['STARTDT'] = datetime.now()
 START_TIME = ''
 # Configuration
-CONFIG = {'config': {'url': app.config['CONFIG_ROOT']}}
+CONFIG = {}
 QUERY = {}
 SERVER = {}
 ESEARCH = ''
@@ -60,12 +76,10 @@ def before_request():
         result = initialize_result()
         return generate_response(result)
     if not QUERY:
-        data = call_responder('config', 'config/rest_services')
-        CONFIG = data['config']
-        data = call_responder('config', 'config/servers')
-        SERVER = data['config']
-        data = call_responder('config', 'config/elasticsearch_queries')
-        QUERY = data['config']
+        # PATCHED: Load from local config files instead of configurator
+        CONFIG = _load_config('rest_services')
+        SERVER = _load_config('servers')
+        QUERY = _load_config('elasticsearch_queries')
     if not ESEARCH:
         try:
             ESEARCH = elasticsearch.Elasticsearch(SERVER['elk-elastic']['address'])

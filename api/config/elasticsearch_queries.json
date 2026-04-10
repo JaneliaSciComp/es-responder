@@ -1,0 +1,357 @@
+{
+    "daily_proofreader_hits": {
+      "index": "emdata4*_dvid_activity-*",
+      "query": {
+        "_source": [
+          "user",
+          "uri",
+          "duration"
+        ],
+        "query": {
+          "bool": {
+            "filter": [],
+            "must": [
+              {
+                "match_all": {}
+              },
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "now-1d"
+                  }
+                }
+              },
+              {
+                "bool": {
+                  "minimum_should_match": 1,
+                  "should": [
+                    {
+                      "match_phrase": {
+                        "uri": "cleave"
+                      }
+                    },
+                    {
+                      "match_phrase": {
+                        "uri": "merge"
+                      }
+                    },
+                    {
+                      "match_phrase": {
+                        "uri": "split-supervoxel"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "must_not": [],
+            "should": []
+          }
+        }
+      }
+    },
+    "dvid_avg_hits": {
+      "index": "emdata*_dvid_activity-*",
+      "query": {
+        "aggs": {
+          "1": {
+            "avg": {
+              "field": "duration"
+            }
+          }
+        },
+        "docvalue_fields": [
+          {
+            "field": "@timestamp",
+            "format": "date_time"
+          }
+        ],
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "now-1m"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "size": 0
+      }
+    },
+    "dvid_client_count_summary": {
+      "index": "emdata*_dvid_activity-*",
+      "query": {
+        "_source": {
+          "excludes": []
+        },
+        "aggs": {
+          "2": {
+            "terms": {
+              "field": "client.keyword",
+              "order": {
+                "_count": "desc"
+              },
+              "size": 100
+            }
+          }
+        },
+        "docvalue_fields": [
+          {
+            "field": "@timestamp",
+            "format": "date_time"
+          }
+        ],
+        "query": {
+          "bool": {
+            "filter": [],
+            "must": [
+              {
+                "match_all": {}
+              },
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "now-1m"
+                  }
+                }
+              }
+            ],
+            "must_not": [],
+            "should": []
+          }
+        },
+        "script_fields": {},
+        "size": 0,
+        "stored_fields": [
+          "*"
+        ]
+      }
+    },
+    "dvid_combined_minute_summary": {
+      "index": "emdata*_dvid_activity-*",
+      "query": {
+        "_source": {
+          "excludes": []
+        },
+        "aggs": {
+          "2": {
+            "aggs": {
+              "3": {
+                "aggs": {
+                  "4": {
+                    "aggs": {
+                      "5": {
+                        "aggs": {
+                          "6": {
+                            "aggs": {
+                              "10": {
+                                "sum": {
+                                  "field": "bytes_in"
+                                }
+                              },
+                              "11": {
+                                "sum": {
+                                  "field": "bytes_out"
+                                }
+                              },
+                              "12": {
+                                "percentiles": {
+                                  "field": "duration",
+                                  "keyed": false,
+                                  "percents": [
+                                    99
+                                  ]
+                                }
+                              },
+                              "7": {
+                                "max": {
+                                  "field": "duration"
+                                }
+                              },
+                              "8": {
+                                "min": {
+                                  "field": "duration"
+                                }
+                              },
+                              "9": {
+                                "avg": {
+                                  "field": "duration"
+                                }
+                              }
+                            },
+                            "terms": {
+                              "field": "port.keyword",
+                              "order": {
+                                "_count": "desc"
+                              },
+                              "size": 10
+                            }
+                          }
+                        },
+                        "terms": {
+                          "field": "server.keyword",
+                          "order": {
+                            "_count": "desc"
+                          },
+                          "size": 10
+                        }
+                      }
+                    },
+                    "terms": {
+                      "field": "method.keyword",
+                      "order": {
+                        "_count": "desc"
+                      },
+                      "size": 10
+                    }
+                  }
+                },
+                "terms": {
+                  "field": "client.keyword",
+                  "order": {
+                    "_count": "desc"
+                  },
+                  "size": 100
+                }
+              }
+            },
+            "terms": {
+              "field": "user.keyword",
+              "order": {
+                "_count": "desc"
+              },
+              "size": 100
+            }
+          }
+        },
+        "docvalue_fields": [
+          {
+            "field": "@timestamp",
+            "format": "date_time"
+          }
+        ],
+        "query": {
+          "bool": {
+            "filter": [],
+            "must": [
+              {
+                "match_all": {}
+              },
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "now-1m"
+                  }
+                }
+              }
+            ],
+            "must_not": [],
+            "should": []
+          }
+        },
+        "script_fields": {},
+        "size": 0,
+        "stored_fields": [
+          "*"
+        ]
+      }
+    },
+    "neutu_date": {
+      "index": "neutu_app-*",
+      "query": {
+        "docvalue_fields": [
+          {
+            "field": "@timestamp",
+            "format": "date"
+          }
+        ],
+        "query": {
+          "bool": {
+            "minimum_should_match": 2,
+            "must": [
+              {
+                "term": {
+                  "@timestamp": {
+                    "value": "2019-10-11"
+                  }
+                }
+              }
+            ],
+            "should": [
+              {
+                "match": {
+                  "description": "BEGIN"
+                }
+              },
+              {
+                "match": {
+                  "description": "END"
+                }
+              },
+              {
+                "match": {
+                  "description": "NeuTu"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "standard_metrics": {
+      "index": "emdata*_dvid_activity-*",
+      "query": {
+        "aggs": {
+          "1": {
+            "avg": {
+              "field": "duration"
+            }
+          },
+          "2": {
+            "min": {
+              "field": "duration"
+            }
+          },
+          "3": {
+            "max": {
+              "field": "duration"
+            }
+          },
+          "4": {
+            "sum": {
+              "field": "bytes_in"
+            }
+          },
+          "5": {
+            "sum": {
+              "field": "bytes_out"
+            }
+          }
+        },
+        "docvalue_fields": [
+          {
+            "field": "@timestamp",
+            "format": "date_time"
+          }
+        ],
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "now-1m"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "size": 0
+      }
+    }
+}
