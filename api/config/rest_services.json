@@ -1,0 +1,163 @@
+{
+    "assignment-manager": {
+      "url": "http://flyem-assignment.int.janelia.org/"
+    },
+    "authentication": {
+      "jacs-dev": "https://c13u09.int.janelia.org/SCSW/AuthenticationService/v1/",
+      "jacs-prod": "https://c13u08.int.janelia.org/SCSW/AuthenticationService/v1/",
+      "jacs-v1": "https://workstation.int.janelia.org/SCSW/AuthenticationService/v1/",
+      "url": "https://api.int.janelia.org/SCSW/AuthenticationService/v1/"
+    },
+    "birdsong": {
+      "url": "https://birdsong.janelia.org/"
+    },
+    "config": {
+      "url": "https://config.int.janelia.org/"
+    },
+    "crossref": {
+      "url": "https://api.crossref.org/works/"
+    },
+    "datacite": {
+      "url": "https://api.datacite.org/dois/"
+    },
+    "dis": {
+      "url": "https://dis.int.janelia.org/"
+    },
+    "dvid-hemibrain": {
+      "url": "http://emdata4.int.janelia.org:8900/"
+    },
+    "elasticsearch": {
+      "url": "https://es-responder.int.janelia.org/"
+    },
+    "elk-elastic": {
+      "url": "http://metrics-elk.int.janelia.org:9200/"
+    },
+    "embl-proteins": {
+      "url": "https://www.ebi.ac.uk/proteins/api/proteins/"
+    },
+    "figshare": {
+      "url": "https://api.figshare.com/v2/"
+    },
+    "figshare_stats": {
+      "url": "https://stats.figshare.com/"
+    },
+    "flycore": {
+      "url": "http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi/"
+    },
+    "flyem-elastic": {
+      "url": "http://metrics-elk.int.janelia.org:9200/"
+    },
+    "flyem-elasticsearch": {
+      "url": "http://metrics-elk.int.janelia.org:9200/"
+    },
+    "flystore": {
+      "url": "http://flystore.int.janelia.org/api/"
+    },
+    "hhmi-services": {
+      "url": "http://services.hhmi.org/"
+    },
+    "jacs": {
+      "query": {
+        "Blockview": "info/sample/blockview",
+        "CycleTime": "info/lsmstack/cycletime",
+        "DatasetPipeline": "data/dataset/pipeline",
+        "Datasets": "data/dataset/all",
+        "Entity": "info/lsmstack/name",
+        "ErrorMIPs": "info/sample/errormips",
+        "LSMImages": "info/lsmstack/images",
+        "PipelineStatus": "info/sample/pipelinestatus",
+        "ProcessingErrors": "info/sample/errors",
+        "SageImagery": "info/dataset/sageimagery",
+        "SampleAging": "info/sample?status=Processing",
+        "SampleAttribute": "info/sample/custom",
+        "SampleErrors": "info/dataset/sampleerrors",
+        "SampleErrorsAll": "info/sample/errors",
+        "SampleEvents": "info/tasks/events",
+        "SampleImage": "info/sample/image",
+        "SampleImageSearch": "info/sample/imagecompletion",
+        "SampleJSON": "data/sample",
+        "SampleLSMs": "data/sample/lsms",
+        "SampleSearch": "info/sample/search",
+        "SampleStatus": "info/sample?totals=true",
+        "StatusCounts": "info/sample/statuscounts",
+        "TasksLatest": "info/tasks/latest",
+        "WorkstationStatus": "info/sample/workstationstatus"
+      },
+      "url": "http://jacs-data.int.janelia.org:8180/rest-v3/"
+    },
+    "jacs-dev-elastic": {
+      "url": "http://workstation-dev.int.janelia.org:9200/"
+    },
+    "jacs-prod-elastic": {
+      "url": "http://workstation.int.janelia.org:9200/"
+    },
+    "jacsv2": {
+      "url": "https://c13u08.int.janelia.org/SCSW/JACS2SyncServices/v2/data/"
+    },
+    "jacsv2-dev": {
+      "url": "https://c13u09.int.janelia.org/SCSW/JACS2SyncServices/v2/data/"
+    },
+    "metrics-elastic": {
+      "url": "http://metrics-elk.int.janelia.org:9200/"
+    },
+    "neuprint": {
+      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ldXByaW50ZGV2QGdtYWlsLmNvbSIsImxldmVsIjoibm9hdXRoIiwiaW1hZ2UtdXJsIjoiaHR0cHM6Ly9saDQuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy0xcG9CTnZhU1VWdy9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BQ2V2b1FNM201NHpDeVh5XzFkVE11NkYtR0lKRjFQQUJnL21vL3Bob3RvLmpwZz9zej01MCIsImV4cCI6MTcyOTkwODQwNH0.gaL8LqEWhV8XIMNzHtTR5_EJ-RQOpqdCDtEoyu_BH5k",
+      "old_url": "https://emdata1.int.janelia.org:13000/api/",
+      "test_url": "https://neuprint-test.janelia.org/api/",
+      "url": "https://neuprint.janelia.org/api/"
+    },
+    "neuprint-auth": {
+      "old_url": "https://emdata1.int.janelia.org:15000/",
+      "test_url": "https://neuprint-test.janelia.org:15000/",
+      "url": "https://neuprint.janelia.org:15000/"
+    },
+    "neuprint-cns": {
+      "url": "https://neuprint-cns.janelia.org/api/"
+    },
+    "neuprint-pre": {
+      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ldXByaW50ZGV2QGdtYWlsLmNvbSIsImxldmVsIjoibm9hdXRoIiwiaW1hZ2UtdXJsIjoiaHR0cHM6Ly9saDQuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy0xcG9CTnZhU1VWdy9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BQ2V2b1FNM201NHpDeVh5XzFkVE11NkYtR0lKRjFQQUJnL21vL3Bob3RvLmpwZz9zej01MCIsImV4cCI6MTcyOTkwODQwNH0.gaL8LqEWhV8XIMNzHtTR5_EJ-RQOpqdCDtEoyu_BH5k",
+      "url": "https://neuprint-pre.janelia.org/api/"
+    },
+    "neuronbrowser": {
+      "url": "http://mouselight.int.janelia.org:9671/graphql"
+    },
+    "oa": {
+      "url": "https://bg.api.oa.works/report/works/"
+    },
+    "openalex": {
+      "url": "https://api.openalex.org//"
+    },
+    "people": {
+      "url": "https://hhmipeople-prod.azurewebsites.net/"
+    },
+    "pmid": {
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0?format=json;tool=pmid_converter;email=svirskasr@hhmi.org;ids="
+    },
+    "sage": {
+      "query": {
+        "Blockview": "info/sample/blockview",
+        "CycleTime": "info/lsmstack/cycletime",
+        "WorkstationStatus": "info/sample/workstationstatus"
+      },
+      "url": "https://sage-responder.int.janelia.org/"
+    },
+    "starfish": {
+      "query": {
+        "flyem": "query/groups-prfs%3Aflyem%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "flylight": "query/groups-prfs%3Aflylight%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "jayaraman": "query/groups-prfs%3Ajayaraman%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "karpovap": "query/groups-prfs%3Akarpovap%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "mousebrainmicro": "query/groups-prfs%3Amousebrainmicro%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "projtechres": "query/groups-prfs%3Aprojtechres%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "quantitativegenomics": "query/groups-prfs%3Aquantitativegenomics%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "rubin": "query/groups-prfs%3Arubin%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "scicomp": "query/groups-prfs%3Ascicompsoft%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true",
+        "svoboda": "query/groups-prfs%3Asvoboda%2Fhome/?query=type%3Dd+depth%3D1&format=fn+rec_aggrs.size&sort_by=-rec_aggrs.size&humanize_nested=true"
+      },
+      "url": "https://starfish.int.janelia.org/api/"
+    },
+    "workday": {
+      "lookup": "http://services.hhmi.org/IT/WD-hcm/wdworkerdetails/",
+      "profile": "https://hhmionline.sharepoint.com/SitePages/Search/JanelianUserProfile.aspx?personnelId="
+    }
+}

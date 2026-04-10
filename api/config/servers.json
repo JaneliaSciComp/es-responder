@@ -1,0 +1,138 @@
+{
+    "FlyCore": {
+      "address": "10.0.192.24:2399",
+      "description": "FlyCore FileMaker database",
+      "jdbc_server": "dbi:JDBC:hostname=flyf2-sync.int.janelia.org;port=9001",
+      "jdbc_url": "jdbc:filemaker://10.0.192.24:2399/FLYF_2?user=flyf2&password=flycore"
+    },
+    "FlyCore_new": {
+      "address": "10.0.192.24:2399",
+      "description": "FlyCore FileMaker database",
+      "jdbc_server": "dbi:JDBC:hostname=flyf2-sync.int.janelia.org;port=9001",
+      "jdbc_url": "jdbc:filemaker://10.0.192.24:2399/FLYF_2?user=flyf2&password=flycore"
+    },
+    "FlyCore_old": {
+      "address": "10.0.192.24:2399",
+      "description": "FlyCore FileMaker database (prod1)",
+      "jdbc_server": "dbi:JDBC:hostname=prod1;port=9001",
+      "jdbc_url": "jdbc:filemaker://10.0.192.24:2399/FLYF_2?user=flyf2&password=flycore"
+    },
+    "JDBC": {
+      "address": "flyf2-sync.int.janelia.org",
+      "description": "JDBC bridge"
+    },
+    "JDBC_new": {
+      "address": "flyf2-sync.int.janelia.org",
+      "description": "JDBC bridge"
+    },
+    "JDBC_old": {
+      "address": "prod1.int.janelia.org",
+      "description": "JDBC bridge (prod1)"
+    },
+    "Kafka": {
+      "address": "vmdmz175.int.janelia.org",
+      "broker_list": [
+        "vmdmz175.int.janelia.org:9092"
+      ],
+      "description": "Kafka server"
+    },
+    "Kafka-dev": {
+      "address": "kafka-dev.int.janelia.org",
+      "broker_list": [
+        "kafka-dev.int.janelia.org:9092",
+        "kafka-dev.int.janelia.org:9093",
+        "kafka-dev.int.janelia.org:9094"
+      ],
+      "description": "Kafka development server"
+    },
+    "Kafka-vm": {
+      "address": "vmdmz175.int.janelia.org",
+      "broker_list": [
+        "vmdmz175.int.janelia.org:9092"
+      ],
+      "description": "Kafka server"
+    },
+    "Vivarium": {
+      "address": "10.0.192.25:2399",
+      "description": "Vivarium FileMaker database"
+    },
+    "Zookeeper": {
+      "address": "zookeeper1.int.janelia.org",
+      "cluster": [
+        "zookeeper1.int.janelia.org:2181",
+        "zookeeper2.int.janelia.org:2181",
+        "zookeeper3.int.janelia.org:2181"
+      ],
+      "description": "Zookeeper"
+    },
+    "configuration": {
+      "address": "https://config.int.janelia.org",
+      "description": "Centralized configuration server"
+    },
+    "doi": {
+      "address": "https://doi.org",
+      "description": "DOI server"
+    },
+    "elk-elastic": {
+      "address": "http://metrics-elk.int.janelia.org:9200",
+      "description": "FlyEM ELK Elastic server"
+    },
+    "flyem-elastic": {
+      "address": "http://metrics-elk.int.janelia.org:9200",
+      "description": "FlyEM ELK Elastic server"
+    },
+    "informatics": {
+      "address": "http://informatics-prod.int.janelia.org",
+      "description": "Informatics web server"
+    },
+    "jacs-dev-elastic": {
+      "address": "http://workstation-dev.int.janelia.org:9200",
+      "description": "JACS development ELK Elastic server"
+    },
+    "jacs-prod-elastic": {
+      "address": "http://workstation.int.janelia.org:9200",
+      "description": "JACS production ELK Elastic server"
+    },
+    "jacs-rest": {
+      "address": "http://jacs-data.int.janelia.org:8180/rest-v3",
+      "description": "JACS REST API"
+    },
+    "jacs-storage": {
+      "address": "https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage_content/storage_path_redirect",
+      "description": "JACS JADE storage"
+    },
+    "jacs-storage-jade": {
+      "address": "http://jade1.int.janelia.org:9880/jacsstorage/master_api/v1/storage_content/storage_path_redirect",
+      "description": "JACS JADE storage"
+    },
+    "jacs-webdav": {
+      "address": "http://jacs-webdav.int.janelia.org/WebDAV",
+      "description": "JACS REST API"
+    },
+    "mail": {
+      "address": "mailrelay.int.janelia.org",
+      "description": "SMTP mail server",
+      "ipaddress": "10.40.3.15",
+      "oldaddress": "mail.hhmi.org"
+    },
+    "metrics-elastic": {
+      "address": "http://metrics-elk.int.janelia.org:9200",
+      "description": "FlyEM ELK Elastic server"
+    },
+    "neuprint": {
+      "address": "https://neuprint.janelia.org",
+      "description": "NeuPrint (production)"
+    },
+    "neuprint-pre": {
+      "address": "https://neuprint-pre.janelia.org",
+      "description": "NeuPrint (preprint)"
+    },
+    "sage-rest": {
+      "address": "https://sage-responder.int.janelia.org",
+      "description": "SAGE REST API"
+    },
+    "webstation": {
+      "address": "http://webstation.int.janelia.org",
+      "description": "Webstation"
+    }
+}
